@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 閾惰瀹剁畻娉曠殑璁捐涓庡疄鐜?- 鏄庝寒涓撲笟涓婚鐗?
- * 鎸?0\u73ed19\u53f7"璁剧疆榛樿鍙傛暟锛氳繘绋嬫暟=2锛岃祫婧愮绫绘暟=3锛屽彲鐢ㄨ祫婧愭€绘暟=29
+ * 银行家算法的设计与实现 - 明亮专业主题版
+ * 按"0\u73ed19\u53f7"设置默认参数：进程数=2，资源种类数=3，可用资源总数=29
  */
 public class BankerAlgorithm extends JFrame {
     private static final int DEFAULT_PROCESSES = 2;
