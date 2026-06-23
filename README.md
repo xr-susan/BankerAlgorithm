@@ -10,8 +10,7 @@
 
 请确保已安装 JDK 11 或更高版本。
 
-`ash
-cd "C:\Users\11\Desktop\操作系统\OS课设报告_信计241何晓柔_202421664119_2026-06"
+
 javac src/banker/BankerAlgorithm.java
 java -cp src banker.BankerAlgorithm
 `
