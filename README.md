@@ -30,3 +30,10 @@
 - 支持示例数据加载与请求测试
 - 中文/英文混合 UI 文本
 
+## 运行方式
+
+建议使用开发环境运行：
+
+- 在 IntelliJ IDEA 或 Eclipse 中打开本项目（将工作目录设为仓库根目录），运行主类 `banker.BankerAlgorithm`。
+- 也可使用命令行工具构建可执行 JAR 并运行（本 README 中不包含直接的 `javac`/`java` 示例）。
+

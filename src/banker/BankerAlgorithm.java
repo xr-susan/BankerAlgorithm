@@ -1,4 +1,4 @@
-﻿package banker;
+package banker;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -42,18 +42,20 @@ public class BankerAlgorithm extends JFrame {
     private static final Font FONT_MONO     = new Font("Consolas", Font.PLAIN, 13);
     private static Font FONT_SMALL;
 
-    /** 鍦?main 涓皟鐢紝妫€娴嬪彲鐢ㄤ腑鏂囧瓧浣撳苟鍒濆鍖栨墍鏈夊瓧浣撳璞?*/
+    /**
+     * 在 main 中调用，检测可用中文字体并初始化所有字体对象
+     */
     private static void initFonts() {
         String[] candidates = {
             "Microsoft YaHei UI", "Microsoft YaHei", "SimHei",
-            "SimSun", "瀹嬩綋", "寰蒋闆呴粦",
+            "SimSun", "宋体", "微软雅黑",
             "Microsoft JhengHei", "PingFang SC", "WenQuanYi Micro Hei",
             "Noto Sans CJK SC", "Source Han Sans SC", "Dialog"
         };
         for (String name : candidates) {
             Font test = new Font(name, Font.PLAIN, 13);
-            // 濡傛灉 getFamily 鍖归厤锛岃鏄庡瓧浣撳彲鐢?
-            if (name.equals(test.getFamily()) || test.canDisplay('閾?)) {
+            // 如果 getFamily 匹配，说明字体可用
+            if (name.equals(test.getFamily()) || test.canDisplay('银')) {
                 FONT_CN = name;
                 break;
             }
@@ -873,21 +875,20 @@ public class BankerAlgorithm extends JFrame {
             } catch (Exception ignored) {}
 
 
-            // 妫€娴嬪彲鐢ㄤ腑鏂囧瓧浣擄紙浼樺厛浣跨敤 canDisplay 楠岃瘉锛?
+            // 检测可用中文字体（优先使用 canDisplay 验证）
             String cnFontName = "Microsoft YaHei UI";
             String[] candidates = {
                 "Microsoft YaHei UI", "Microsoft YaHei", "SimHei",
-                "寰蒋闆呴粦", "SimSun", "瀹嬩綋",
+                "微软雅黑", "SimSun", "宋体",
                 "Noto Sans CJK SC", "Source Han Sans SC", "Dialog"
             };
             for (String name : candidates) {
                 Font test = new Font(name, Font.PLAIN, 13);
-                if (name.equals(test.getFamily()) || test.canDisplay("閾?.charAt(0))) {
+                if (name.equals(test.getFamily()) || test.canDisplay("银".charAt(0))) {
                     cnFontName = name;
                     break;
                 }
             }
-
             Font cn = new Font(cnFontName, Font.PLAIN, 13);
             Font cnBold = new Font(cnFontName, Font.BOLD, 13);
             String[] keys = {
