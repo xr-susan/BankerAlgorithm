@@ -19,6 +19,10 @@
 
 请确保已安装 JDK 11 或更高版本。
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 38c66b8 (Remove javac/java run example from README)
 ## 特性
 
 - 图形化界面（Swing）
