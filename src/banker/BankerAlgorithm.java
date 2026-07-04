@@ -75,6 +75,7 @@ public class BankerAlgorithm extends JFrame {
     private int n = 0;
     private int m = 0;
     private int[] available;
+    private int[] resourceTotals;
     private int[][] max;
     private int[][] allocation;
     private int[][] need;
@@ -537,13 +538,15 @@ public class BankerAlgorithm extends JFrame {
                 return;
             }
             available = new int[m];
+            resourceTotals = new int[m];
             max = new int[n][m];
             allocation = new int[n][m];
             need = new int[n][m];
             int base = total / m;
             int remain = total % m;
             for (int j = 0; j < m; j++) {
-                available[j] = base + (j < remain ? 1 : 0);
+                resourceTotals[j] = base + (j < remain ? 1 : 0);
+                available[j] = resourceTotals[j];
             }
             setupTables();
             buildRequestPanel();
@@ -654,6 +657,7 @@ public class BankerAlgorithm extends JFrame {
 
     private boolean readTables() {
         try {
+            int[] allocatedByResource = new int[m];
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
                     max[i][j] = Integer.parseInt(modelMax.getValueAt(i, j + 1).toString().trim());
@@ -664,11 +668,16 @@ public class BankerAlgorithm extends JFrame {
                         return false;
                     }
                     need[i][j] = max[i][j] - allocation[i][j];
+                    allocatedByResource[j] += allocation[i][j];
                 }
             }
             for (int j = 0; j < m; j++) {
-                available[j] = Integer.parseInt(modelAvailable.getValueAt(0, j).toString().trim());
-                if (available[j] < 0) throw new NumberFormatException();
+                if (allocatedByResource[j] > resourceTotals[j]) {
+                    error("资源 R" + j + " 的已分配总量 " + allocatedByResource[j]
+                            + " 超过该类资源总量 " + resourceTotals[j] + "。");
+                    return false;
+                }
+                available[j] = resourceTotals[j] - allocatedByResource[j];
             }
             refreshNeedAndAvailable();
             return true;
@@ -811,7 +820,7 @@ public class BankerAlgorithm extends JFrame {
                 max[i][j] = 0; allocation[i][j] = 0; need[i][j] = 0;
             }
         for (int j = 0; j < m; j++) {
-            available[j] = DEFAULT_TOTAL / m + (j < DEFAULT_TOTAL % m ? 1 : 0);
+            available[j] = resourceTotals[j];
             modelAvailable.setValueAt(available[j], 0, j);
         }
         log("[RESET] \u72b6\u6001\u5df2\u91cd\u7f6e\u3002");
