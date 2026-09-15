@@ -1,6 +1,9 @@
+target/
 out/
+out-test/
 *.class
 *.jar
 .idea/
 .vscode/
 *.iml
+.DS_Store

@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: 构建与测试 (JDK ${{ matrix.java }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['17', '21']
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+          cache: maven
+
+      - name: 编译主源码
+        run: mvn -B -q compile
+
+      - name: 运行单元测试
+        # 算法核心与 Swing 界面完全解耦，因此无需 X server 即可在 CI 中运行。
+        run: mvn -B test
+
+      - name: 打包可执行 jar
+        run: mvn -B -q package -DskipTests
+
+      - name: 上传测试报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports-jdk${{ matrix.java }}
+          path: target/surefire-reports/
+          if-no-files-found: ignore
+
+      - name: 上传可执行 jar
+        if: matrix.java == '17'
+        uses: actions/upload-artifact@v4
+        with:
+          name: banker-algorithm-jar
+          path: target/banker-algorithm.jar
+          if-no-files-found: warn
