@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 閾惰瀹剁畻娉曠殑璁捐涓庡疄鐜?- 鏄庝寒涓撲笟涓婚鐗?
- * 鎸?0\u73ed19\u53f7"璁剧疆榛樿鍙傛暟锛氳繘绋嬫暟=2锛岃祫婧愮绫绘暟=3锛屽彲鐢ㄨ祫婧愭€绘暟=29
+ * 银行家算法的设计与实现 - 明亮专业主题版
+ * 按"20班19号"设置默认参数：进程数=2，资源种类数=3，可用资源总数=29
  */
 public class BankerAlgorithm extends JFrame {
     private static final int DEFAULT_PROCESSES = 2;
     private static final int DEFAULT_RESOURCES = 3;
     private static final int DEFAULT_TOTAL = 29;
 
-    // 鈹€鈹€ 鏄庝寒閰嶈壊鏂规 鈹€鈹€
+    // ── 明亮配色方案 ──
     private static final Color BG_DARK       = new Color(245, 247, 250);
     private static final Color BG_CARD       = new Color(255, 255, 255);
     private static final Color BG_INPUT      = new Color(240, 243, 248);
@@ -66,7 +66,7 @@ public class BankerAlgorithm extends JFrame {
         FONT_SMALL    = new Font(FONT_CN, Font.PLAIN, 11);
     }
 
-    /** 鑾峰彇瀹夊叏瀛椾綋锛堢‘淇濅腑鏂囧彲鏄剧ず锛?*/
+    /** 获取安全字体（确保中文可显示） */
     private static Font safeFont(Font base) {
         if (base == null) return new Font(FONT_CN, Font.PLAIN, 13);
         return base;
@@ -99,13 +99,13 @@ public class BankerAlgorithm extends JFrame {
     private JLabel statusIndicator;
 
     public BankerAlgorithm() {
-        super("\u94f6\u884c\u5bb6\u7b97\u6cd5 \u00b7 \u6b7b\u9501\u907f\u514d\u7cfb\u7edf");
+        super("银行家算法 · 死锁避免系统");
         initUI();
     }
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
-    //  UI 鍒濆鍖?
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+    // ════════════════════════════════════════════════════════════════
+    //  UI 初始化
+    // ════════════════════════════════════════════════════════════════
 
     private void initUI() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -142,7 +142,7 @@ public class BankerAlgorithm extends JFrame {
         UIManager.put("ScrollBar.thumb", new Color(200, 208, 218));
     }
 
-    // 鈹€鈹€ 椤堕儴鏍囬鏍?鈹€鈹€
+    // ── 顶部标题栏 ──
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout()) {
             @Override protected void paintComponent(Graphics g) {
@@ -152,7 +152,7 @@ public class BankerAlgorithm extends JFrame {
                 GradientPaint gp = new GradientPaint(0, 0, new Color(255, 255, 255), getWidth(), 0, new Color(241, 245, 249));
                 g2.setPaint(gp);
                 g2.fillRect(0, 0, getWidth(), getHeight());
-                // 搴曢儴娓愬彉绾?
+                // 底部渐变色
                 g2.setPaint(new GradientPaint(0, getHeight() - 2, ACCENT_BLUE, getWidth(), getHeight() - 2, ACCENT_PURPLE));
                 g2.fillRect(0, getHeight() - 2, getWidth(), 3);
                 g2.dispose();
@@ -161,14 +161,14 @@ public class BankerAlgorithm extends JFrame {
         header.setPreferredSize(new Dimension(0, 64));
         header.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 24));
 
-        // 宸︿晶鏍囬
+        // 左侧标题
         JPanel titleArea = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
         titleArea.setOpaque(false);
-        JLabel icon = new JLabel("\u25c6"); // 鈼?榛戣壊鑿卞舰
+        JLabel icon = new JLabel("◆"); // ◆ 黑色菱形
         icon.setFont(new Font(FONT_CN, Font.BOLD, 22));
         icon.setForeground(ACCENT_BLUE);
         titleArea.add(icon);
-        JLabel title = new JLabel("\u94f6\u884c\u5bb6\u7b97\u6cd5");
+        JLabel title = new JLabel("银行家算法");
         title.setFont(FONT_TITLE);
         title.setForeground(TEXT_PRIMARY);
         titleArea.add(title);
@@ -178,56 +178,56 @@ public class BankerAlgorithm extends JFrame {
         titleArea.add(subtitle);
         header.add(titleArea, BorderLayout.WEST);
 
-        // 鍙充晶鍙傛暟闈㈡澘
+        // 右侧参数面板
         JPanel params = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 14));
         params.setOpaque(false);
-        params.add(paramLabel("\u8fdb\u7a0b\u6570"));
+        params.add(paramLabel("进程数"));
         tfProcesses = paramField(String.valueOf(DEFAULT_PROCESSES));
         params.add(tfProcesses);
-        params.add(paramLabel("\u8d44\u6e90\u79cd\u7c7b"));
+        params.add(paramLabel("资源种类"));
         tfResources = paramField(String.valueOf(DEFAULT_RESOURCES));
         params.add(tfResources);
-        params.add(paramLabel("\u8d44\u6e90\u603b\u6570"));
+        params.add(paramLabel("资源总数"));
         tfTotal = paramField(String.valueOf(DEFAULT_TOTAL));
         params.add(tfTotal);
-        params.add(accentButton("\u521d\u59cb\u5316", ACCENT_BLUE, e -> initSystem()));
-        params.add(accentButton("\u8f7d\u5165\u793a\u4f8b", ACCENT_PURPLE, e -> loadDemo()));
+        params.add(accentButton("初始化", ACCENT_BLUE, e -> initSystem()));
+        params.add(accentButton("载入示例", ACCENT_PURPLE, e -> loadDemo()));
         header.add(params, BorderLayout.EAST);
 
         return header;
     }
 
-    // 鈹€鈹€ 涓诲唴瀹瑰尯 鈹€鈹€
+    // ── 主内容区 ──
     private JPanel buildMainContent() {
         JPanel main = new JPanel(new BorderLayout(12, 12));
         main.setOpaque(false);
         main.setBorder(BorderFactory.createEmptyBorder(12, 16, 0, 16));
 
-        // 宸︿晶锛氱煩闃靛崱鐗囷紙涓婁笅鎺掑垪锛?
+        // 左侧：矩阵卡片（上下排列）
         JPanel matrixPanel = new JPanel(new GridLayout(4, 1, 0, 8));
         matrixPanel.setOpaque(false);
 
         modelMax = new DefaultTableModel();
         tableMax = createStyledTable(modelMax, true);
-        matrixPanel.add(card("\u6700\u5927\u9700\u6c42\u77e9\u9635  Max", tableMax, ACCENT_ORANGE));
+        matrixPanel.add(card("最大需求矩阵  Max", tableMax, ACCENT_ORANGE));
 
         modelAllocation = new DefaultTableModel();
         tableAllocation = createStyledTable(modelAllocation, true);
-        matrixPanel.add(card("\u5df2\u5206\u914d\u77e9\u9635  Allocation", tableAllocation, ACCENT_GREEN));
+        matrixPanel.add(card("已分配矩阵  Allocation", tableAllocation, ACCENT_GREEN));
 
         modelNeed = new DefaultTableModel();
         tableNeed = createStyledTable(modelNeed, false);
-        matrixPanel.add(card("\u9700\u6c42\u77e9\u9635  Need", tableNeed, ACCENT_BLUE));
+        matrixPanel.add(card("需求矩阵  Need", tableNeed, ACCENT_BLUE));
 
         modelAvailable = new DefaultTableModel();
         tableAvailable = createStyledTable(modelAvailable, false);
-        matrixPanel.add(card("\u53ef\u7528\u8d44\u6e90  Available", tableAvailable, ACCENT_PURPLE));
+        matrixPanel.add(card("可用资源  Available", tableAvailable, ACCENT_PURPLE));
 
-        // 鍙充晶锛氳緭鍑?+ 璇锋眰
+        // 右侧：输出 + 请求
         JPanel rightPanel = new JPanel(new BorderLayout(0, 10));
         rightPanel.setOpaque(false);
 
-        // 杈撳嚭鎺у埗鍙?
+        // 输出控制台
         outputArea = new JTextArea();
         outputArea.setEditable(false);
         outputArea.setFont(FONT_BODY);
@@ -239,19 +239,19 @@ public class BankerAlgorithm extends JFrame {
         JScrollPane outScroll = new JScrollPane(outputArea);
         outScroll.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         outScroll.getViewport().setBackground(new Color(248, 250, 252));
-        rightPanel.add(card("\u8fd0\u884c\u8f93\u51fa  Console", outScroll, new Color(180, 220, 160)), BorderLayout.CENTER);
+        rightPanel.add(card("运行输出  Console", outScroll, new Color(180, 220, 160)), BorderLayout.CENTER);
 
-        // 璇锋眰闈㈡澘 + 鎸夐挳
+        // 请求面板 + 按钮
         JPanel bottomRight = new JPanel(new BorderLayout(0, 8));
         bottomRight.setOpaque(false);
         requestPanel = new JPanel();
         requestPanel.setLayout(new BoxLayout(requestPanel, BoxLayout.Y_AXIS));
         requestPanel.setOpaque(false);
-        bottomRight.add(card("\u8d44\u6e90\u8bf7\u6c42  Request", requestPanel, ACCENT_ORANGE), BorderLayout.CENTER);
+        bottomRight.add(card("资源请求  Request", requestPanel, ACCENT_ORANGE), BorderLayout.CENTER);
         bottomRight.add(buildActionButtons(), BorderLayout.SOUTH);
         rightPanel.add(bottomRight, BorderLayout.SOUTH);
 
-        // 鍒嗗壊闈㈡澘
+        // 分割面板
         JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, matrixPanel, rightPanel);
         split.setDividerLocation(620);
         split.setDividerSize(4);
@@ -263,18 +263,18 @@ public class BankerAlgorithm extends JFrame {
         return main;
     }
 
-    // 鈹€鈹€ 搴曢儴鎿嶄綔鎸夐挳鏍?鈹€鈹€
+    // ── 底部操作按钮栏 ──
     private JPanel buildActionButtons() {
         JPanel btnBar = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
         btnBar.setOpaque(false);
-        btnBar.add(actionButton("\u5b89\u5168\u6027\u68c0\u6d4b", ACCENT_GREEN, "[+]", e -> checkSafety()));
-        btnBar.add(actionButton("\u63d0\u4ea4\u8bf7\u6c42", ACCENT_BLUE, "[>]", e -> processRequest()));
-        btnBar.add(actionButton("\u91cd\u7f6e\u72b6\u6001", ACCENT_RED, "[R]", e -> resetState()));
-        btnBar.add(actionButton("\u6e05\u7a7a\u8f93\u51fa", TEXT_SECONDARY, "[X]", e -> outputArea.setText("")));
+        btnBar.add(actionButton("安全性检测", ACCENT_GREEN, "[+]", e -> checkSafety()));
+        btnBar.add(actionButton("提交请求", ACCENT_BLUE, "[>]", e -> processRequest()));
+        btnBar.add(actionButton("重置状态", ACCENT_RED, "[R]", e -> resetState()));
+        btnBar.add(actionButton("清空输出", TEXT_SECONDARY, "[X]", e -> outputArea.setText("")));
         return btnBar;
     }
 
-    // 鈹€鈹€ 鐘舵€佹爮 鈹€鈹€
+    // ── 状态栏 ──
     private JPanel buildStatusBar() {
         JPanel bar = new JPanel(new BorderLayout());
         bar.setBackground(new Color(241, 245, 249));
@@ -283,11 +283,11 @@ public class BankerAlgorithm extends JFrame {
                 BorderFactory.createMatteBorder(2, 0, 0, 0, BORDER_COLOR),
                 BorderFactory.createEmptyBorder(0, 16, 0, 16)));
 
-        statusIndicator = new JLabel("\u25cf");
+        statusIndicator = new JLabel("●");
         statusIndicator.setForeground(ACCENT_GREEN);
         statusIndicator.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 
-        statusLabel = new JLabel("\u5c31\u7eea \u00b7 \u7b49\u5f85\u521d\u59cb\u5316");
+        statusLabel = new JLabel("就绪 · 等待初始化");
         statusLabel.setFont(FONT_SMALL);
         statusLabel.setForeground(TEXT_SECONDARY);
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 4));
@@ -296,7 +296,7 @@ public class BankerAlgorithm extends JFrame {
         left.add(statusLabel);
         bar.add(left, BorderLayout.WEST);
 
-        JLabel version = new JLabel("\u00b7 0\u73ed19\u53f7");
+        JLabel version = new JLabel("· 0班19号");
         version.setFont(FONT_SMALL);
         version.setForeground(TEXT_SECONDARY);
         bar.add(version, BorderLayout.EAST);
@@ -304,20 +304,20 @@ public class BankerAlgorithm extends JFrame {
         return bar;
     }
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
-    //  鑷畾涔夌粍浠跺伐鍘?
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+    // ════════════════════════════════════════════════════════════════
+    //  自定义组件工厂
+    // ════════════════════════════════════════════════════════════════
 
-    /** 鍗＄墖瀹瑰櫒 */
+    /** 卡片容器 */
     private JPanel card(String title, JComponent content, Color accent) {
         JPanel card = new JPanel(new BorderLayout()) {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                // 鍗＄墖鍦嗚鑳屾櫙
+                // 卡片圆角背景
                 g2.setColor(BG_CARD);
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
-                // 椤堕儴寮鸿皟鑹叉潯
+                // 顶部强调色条
                 g2.setColor(accent);
                 g2.fillRoundRect(12, 0, getWidth() - 24, 3, 2, 2);
                 g2.dispose();
@@ -340,7 +340,7 @@ public class BankerAlgorithm extends JFrame {
         return card;
     }
 
-    /** 鍒涘缓鏍峰紡鍖栬〃鏍?*/
+    /** 创建样式化表格 */
     private JTable createStyledTable(DefaultTableModel model, boolean editable) {
         JTable table = new JTable(model) {
             @Override public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
@@ -391,7 +391,7 @@ public class BankerAlgorithm extends JFrame {
         table.setEnabled(editable);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-        // 琛ㄥご鏍峰紡
+        // 表头样式
         JTableHeader header = table.getTableHeader();
         header.setBackground(TABLE_HEADER);
         header.setForeground(TEXT_SECONDARY);
@@ -403,7 +403,7 @@ public class BankerAlgorithm extends JFrame {
         return table;
     }
 
-    /** 鍙傛暟鏍囩 */
+    /** 参数标签 */
     private JLabel paramLabel(String text) {
         JLabel l = new JLabel(text);
         l.setFont(FONT_SMALL);
@@ -411,7 +411,7 @@ public class BankerAlgorithm extends JFrame {
         return l;
     }
 
-    /** 鍙傛暟杈撳叆妗?*/
+    /** 参数输入框 */
     private JTextField paramField(String text) {
         JTextField tf = new JTextField(text, 4) {
             @Override protected void paintComponent(Graphics g) {
@@ -443,7 +443,7 @@ public class BankerAlgorithm extends JFrame {
         return tf;
     }
 
-    /** 寮鸿皟鑹插渾瑙掓寜閽紙鏍囬鏍忕敤锛?*/
+    /** 强调色圆角按钮（标题栏用） */
     private JButton accentButton(String text, Color bg, ActionListener listener) {
         Font btnFont = FONT_BODY.deriveFont(Font.BOLD);
         JButton btn = new JButton(text) {
@@ -481,7 +481,7 @@ public class BankerAlgorithm extends JFrame {
         return btn;
     }
 
-    /** 鎿嶄綔鎸夐挳锛堝簳閮ㄧ敤锛屽甫鍥炬爣锛?*/
+    /** 操作按钮（底部用，带图标） */
     private JButton actionButton(String text, Color bg, String icon, ActionListener listener) {
         Font btnFont = FONT_BODY.deriveFont(Font.BOLD);
         JButton btn = new JButton(icon + "  " + text) {
@@ -524,9 +524,9 @@ public class BankerAlgorithm extends JFrame {
         return btn;
     }
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
-    //  涓氬姟閫昏緫锛堜笌鍘熺増涓€鑷达級
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+    // ════════════════════════════════════════════════════════════════
+    //  业务逻辑（与原版一致）
+    // ════════════════════════════════════════════════════════════════
 
     private void initSystem() {
         try {
@@ -534,7 +534,7 @@ public class BankerAlgorithm extends JFrame {
             m = Integer.parseInt(tfResources.getText().trim());
             int total = Integer.parseInt(tfTotal.getText().trim());
             if (n <= 0 || m <= 0 || total <= 0) {
-                error("\u53c2\u6570\u5fc5\u987b\u4e3a\u6b63\u6574\u6570\u3002");
+                error("参数必须为正整数。");
                 return;
             }
             available = new int[m];
@@ -550,11 +550,11 @@ public class BankerAlgorithm extends JFrame {
             }
             setupTables();
             buildRequestPanel();
-            log("[OK] \u7cfb\u7edf\u521d\u59cb\u5316\u5b8c\u6210\uff1a\u8fdb\u7a0b\u6570 = " + n + "\uff0c\u8d44\u6e90\u79cd\u7c7b\u6570 = " + m + "\uff0c\u8d44\u6e90\u603b\u6570 = " + total);
-            log("     \u8bf7\u5728\u8868\u683c\u4e2d\u586b\u5199 Max \u548c Allocation\uff0c\u7136\u540e\u6267\u884c\u5b89\u5168\u6027\u68c0\u6d4b\u6216\u63d0\u4ea4\u8d44\u6e90\u8bf7\u6c42\u3002");
-            setStatus("\u5df2\u521d\u59cb\u5316 \u00b7 " + n + " \u8fdb\u7a0b \u00b7 " + m + " \u79cd\u8d44\u6e90", ACCENT_GREEN);
+            log("[OK] 系统初始化完成：进程数 = " + n + "，资源种类数 = " + m + "，资源总数 = " + total);
+            log("     请在表格中填写 Max 和 Allocation，然后执行安全性检测或提交资源请求。");
+            setStatus("已初始化 · " + n + " 进程 · " + m + " 种资源", ACCENT_GREEN);
         } catch (NumberFormatException ex) {
-            error("\u8bf7\u8f93\u5165\u5408\u6cd5\u6570\u5b57\u3002");
+            error("请输入合法数字。");
         }
     }
 
@@ -570,7 +570,7 @@ public class BankerAlgorithm extends JFrame {
     private void setupModel(DefaultTableModel model, String[] cols) {
         model.setColumnCount(0);
         model.setRowCount(0);
-        model.addColumn("\u8fdb\u7a0b");
+        model.addColumn("进程");
         for (String col : cols) model.addColumn(col);
         for (int i = 0; i < n; i++) {
             Object[] row = new Object[m + 1];
@@ -595,7 +595,7 @@ public class BankerAlgorithm extends JFrame {
 
         JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
         row1.setOpaque(false);
-        JLabel lbl = new JLabel("\u8fdb\u7a0b\u53f7  P");
+        JLabel lbl = new JLabel("进程号  P");
         lbl.setFont(FONT_BODY);
         lbl.setForeground(TEXT_SECONDARY);
         row1.add(lbl);
@@ -606,7 +606,7 @@ public class BankerAlgorithm extends JFrame {
 
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
         row2.setOpaque(false);
-        JLabel lbl2 = new JLabel("\u8bf7\u6c42\u91cf");
+        JLabel lbl2 = new JLabel("请求量");
         lbl2.setFont(FONT_BODY);
         lbl2.setForeground(TEXT_SECONDARY);
         row2.add(lbl2);
@@ -651,40 +651,33 @@ public class BankerAlgorithm extends JFrame {
             available[j] = totalForType - allocated;
         }
         refreshNeedAndAvailable();
-        log("[DEMO] \u793a\u4f8b\u6570\u636e\u5df2\u8f7d\u5165\u3002");
-        setStatus("\u5df2\u8f7d\u5165\u793a\u4f8b\u6570\u636e", ACCENT_PURPLE);
+        log("[DEMO] 示例数据已载入。");
+        setStatus("已载入示例数据", ACCENT_PURPLE);
     }
 
     private boolean readTables() {
         try {
-            int[] allocatedByResource = new int[m];
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
                     max[i][j] = Integer.parseInt(modelMax.getValueAt(i, j + 1).toString().trim());
                     allocation[i][j] = Integer.parseInt(modelAllocation.getValueAt(i, j + 1).toString().trim());
-                    if (max[i][j] < 0 || allocation[i][j] < 0) throw new NumberFormatException();
-                    if (allocation[i][j] > max[i][j]) {
-                        error("P" + i + " \u7684\u5df2\u5206\u914d\u91cf R" + j + " \u8d85\u8fc7\u6700\u5927\u9700\u6c42\u3002");
-                        return false;
-                    }
-                    need[i][j] = max[i][j] - allocation[i][j];
-                    allocatedByResource[j] += allocation[i][j];
                 }
             }
-            for (int j = 0; j < m; j++) {
-                if (allocatedByResource[j] > resourceTotals[j]) {
-                    error("资源 R" + j + " 的已分配总量 " + allocatedByResource[j]
-                            + " 超过该类资源总量 " + resourceTotals[j] + "。");
-                    return false;
-                }
-                available[j] = resourceTotals[j] - allocatedByResource[j];
-            }
-            refreshNeedAndAvailable();
-            return true;
         } catch (NumberFormatException ex) {
-            error("\u8868\u683c\u4e2d\u5b58\u5728\u65e0\u6548\u6570\u636e\uff0c\u8bf7\u68c0\u67e5\u3002");
+            error("表格中存在无效数据，请检查。");
             return false;
         }
+
+        // 需求矩阵与可用资源统一交给 BankerSolver 推导，界面只负责展示结果。
+        try {
+            need = BankerSolver.reshape(BankerSolver.computeNeed(max, allocation), n, m);
+            available = BankerSolver.computeAvailable(resourceTotals, allocation);
+        } catch (IllegalArgumentException ex) {
+            error(ex.getMessage());
+            return false;
+        }
+        refreshNeedAndAvailable();
+        return true;
     }
 
     private void refreshNeedAndAvailable() {
@@ -696,29 +689,43 @@ public class BankerAlgorithm extends JFrame {
     }
 
     private void checkSafety() {
-        if (n == 0) { error("\u8bf7\u5148\u521d\u59cb\u5316\u7cfb\u7edf\u3002"); return; }
+        if (n == 0) { error("请先初始化系统。"); return; }
         if (!readTables()) return;
-        log("\n======== \u5b89\u5168\u6027\u68c0\u6d4b  Safety Check ========");
-        List<Integer> seq = safetyAlgorithm(available, allocation, need, n, m, true);
-        if (seq != null) {
-            log("\n[SAFE] \u7cfb\u7edf\u5904\u4e8e\u5b89\u5168\u72b6\u6001");
-            log("       \u5b89\u5168\u5e8f\u5217\uff1a" + joinSequence(seq));
-            setStatus("\u5b89\u5168\u72b6\u6001 \u00b7 " + joinSequence(seq), ACCENT_GREEN);
+        log("\n======== 安全性检测  Safety Check ========");
+        BankerSolver.SafetyReport report = BankerSolver.checkSafety(available, allocation, need);
+        logSteps(report);
+        if (report.safe()) {
+            log("\n[SAFE] 系统处于安全状态");
+            log("       安全序列：" + joinSequence(report.sequence()));
+            setStatus("安全状态 · " + joinSequence(report.sequence()), ACCENT_GREEN);
         } else {
-            log("\n[WARN] \u7cfb\u7edf\u5904\u4e8e\u4e0d\u5b89\u5168\u72b6\u6001\uff0c\u65e0\u53ef\u7528\u5b89\u5168\u5e8f\u5217");
-            setStatus("\u4e0d\u5b89\u5168\u72b6\u6001", ACCENT_RED);
+            log("\n[WARN] 系统处于不安全状态，无可用安全序列");
+            setStatus("不安全状态", ACCENT_RED);
         }
     }
 
+    /** 把安全性检测的每一步渲染成对齐的日志表格。 */
+    private void logSteps(BankerSolver.SafetyReport report) {
+        if (report.steps().isEmpty()) return;
+        log("  步骤  进程  Need               Work");
+        log("  " + "─".repeat(50));
+        for (BankerSolver.Step step : report.steps()) {
+            log(String.format("   #%-2d  P%-2d  %-18s %s → %s",
+                    step.order(), step.process(), BankerSolver.format(step.need()),
+                    BankerSolver.format(step.workBefore()), BankerSolver.format(step.workAfter())));
+        }
+        log("  " + "─".repeat(50));
+    }
+
     private void processRequest() {
-        if (n == 0) { error("\u8bf7\u5148\u521d\u59cb\u5316\u7cfb\u7edf\u3002"); return; }
+        if (n == 0) { error("请先初始化系统。"); return; }
         if (!readTables()) return;
         int pid;
         int[] request = new int[m];
         try {
             pid = Integer.parseInt(tfRequestProcess.getText().trim());
             if (pid < 0 || pid >= n) {
-                error("\u8fdb\u7a0b\u53f7\u8d85\u51fa\u8303\u56f4 [0, " + (n - 1) + "]\u3002");
+                error("进程号超出范围 [0, " + (n - 1) + "]。");
                 return;
             }
             for (int j = 0; j < m; j++) {
@@ -726,88 +733,48 @@ public class BankerAlgorithm extends JFrame {
                 if (request[j] < 0) throw new NumberFormatException();
             }
         } catch (NumberFormatException ex) {
-            error("\u8d44\u6e90\u8bf7\u6c42\u8f93\u5165\u65e0\u6548\u3002");
+            error("资源请求输入无效。");
             return;
         }
-        log("\n======== \u94f6\u884c\u5bb6\u7b97\u6cd5 \u00b7 P" + pid + " \u8d44\u6e90\u8bf7\u6c42\u5904\u7406 ========");
-        log("  Request = " + arrayToString(request));
-        for (int j = 0; j < m; j++) {
-            if (request[j] > need[pid][j]) {
-                log("  [FAIL] \u8bf7\u6c42\u8d85\u51fa\u6700\u5927\u9700\u6c42\uff1aR" + j + " \u8bf7\u6c42=" + request[j] + " > Need=" + need[pid][j]);
-                setStatus("\u8bf7\u6c42\u88ab\u62d2\u7edd\uff1a\u8d85\u51fa\u9700\u6c42", ACCENT_RED);
-                return;
-            }
-        }
-        for (int j = 0; j < m; j++) {
-            if (request[j] > available[j]) {
-                log("  [WAIT] \u53ef\u7528\u8d44\u6e90\u4e0d\u8db3\uff0cP" + pid + " \u9700\u8981\u7b49\u5f85");
-                setStatus("\u7b49\u5f85\u4e2d\uff1a\u8d44\u6e90\u4e0d\u8db3", ACCENT_ORANGE);
-                return;
-            }
-        }
-        int[] newAvailable = available.clone();
-        int[][] newAllocation = deepCopy(allocation);
-        int[][] newNeed = deepCopy(need);
-        for (int j = 0; j < m; j++) {
-            newAvailable[j] -= request[j];
-            newAllocation[pid][j] += request[j];
-            newNeed[pid][j] -= request[j];
-        }
-        log("  \u8bd5\u63a2\u5206\u914d \u2192 Available = " + arrayToString(newAvailable));
-        log("             Allocation[" + pid + "] = " + arrayToString(newAllocation[pid]));
-        log("             Need[" + pid + "] = " + arrayToString(newNeed[pid]));
-        List<Integer> seq = safetyAlgorithm(newAvailable, newAllocation, newNeed, n, m, true);
-        if (seq != null) {
-            available = newAvailable;
-            allocation = newAllocation;
-            need = newNeed;
-            refreshNeedAndAvailable();
-            log("\n  [OK] \u5141\u8bb8\u5206\u914d\uff01");
-            log("       \u5b89\u5168\u5e8f\u5217\uff1a" + joinSequence(seq));
-            setStatus("\u5206\u914d\u6210\u529f \u00b7 " + joinSequence(seq), ACCENT_GREEN);
-        } else {
-            log("\n  [FAIL] \u62d2\u7edd\u5206\u914d\uff01\u8be5\u8bf7\u6c42\u4f1a\u4f7f\u7cfb\u7edf\u8fdb\u5165\u4e0d\u5b89\u5168\u72b6\u6001\u3002");
-            setStatus("\u5206\u914d\u88ab\u62d2\u7edd\uff1a\u4e0d\u5b89\u5168", ACCENT_RED);
-        }
-    }
 
-    private List<Integer> safetyAlgorithm(int[] avail, int[][] alloc, int[][] nd, int pNum, int rNum, boolean verbose) {
-        int[] work = avail.clone();
-        boolean[] finish = new boolean[pNum];
-        List<Integer> seq = new ArrayList<>();
-        if (verbose) {
-            log("  \u6b65\u9aa4  \u8fdb\u7a0b  Need               Work");
-            log("  " + "\u2500".repeat(50));
-        }
-        while (seq.size() < pNum) {
-            boolean found = false;
-            for (int i = 0; i < pNum; i++) {
-                if (!finish[i] && canAllocate(nd[i], work, rNum)) {
-                    int[] before = work.clone();
-                    for (int j = 0; j < rNum; j++) work[j] += alloc[i][j];
-                    finish[i] = true;
-                    seq.add(i);
-                    found = true;
-                    if (verbose) {
-                        log(String.format("   #%-2d  P%-2d  %-18s %s \u2192 %s",
-                                seq.size(), i, arrayToString(nd[i]), arrayToString(before), arrayToString(work)));
-                    }
-                    break;
-                }
-            }
-            if (!found) {
-                if (verbose) log("  \u2718 \u65e0\u6cd5\u627e\u5230\u66f4\u591a\u53ef\u5206\u914d\u8fdb\u7a0b");
-                return null;
-            }
-        }
-        if (verbose) log("  " + "\u2500".repeat(50));
-        return seq;
-    }
+        log("\n======== 银行家算法 · P" + pid + " 资源请求处理 ========");
+        log("  Request = " + BankerSolver.format(request));
 
-    private boolean canAllocate(int[] needRow, int[] work, int rNum) {
-        for (int j = 0; j < rNum; j++)
-            if (needRow[j] > work[j]) return false;
-        return true;
+        BankerSolver.RequestReport report =
+                BankerSolver.evaluateRequest(available, allocation, need, pid, request);
+
+        switch (report.status()) {
+            case EXCEEDS_NEED -> {
+                int j = report.violatingResource();
+                log("  [FAIL] 请求超出最大需求：R" + j + " 请求=" + request[j]
+                        + " > Need=" + need[pid][j]);
+                setStatus("请求被拒绝：超出需求", ACCENT_RED);
+            }
+            case INSUFFICIENT_RESOURCES -> {
+                log("  [WAIT] 可用资源不足，P" + pid + " 需要等待");
+                setStatus("等待中：资源不足", ACCENT_ORANGE);
+            }
+            case UNSAFE -> {
+                log("  [FAIL] 拒绝分配！该请求会使系统进入不安全状态。");
+                setStatus("分配被拒绝：不安全", ACCENT_RED);
+            }
+            case GRANTED -> {
+                log("  试探分配 → Available = " + BankerSolver.format(report.available()));
+                log("             Allocation[" + pid + "] = "
+                        + BankerSolver.format(report.allocation()[pid]));
+                log("             Need[" + pid + "] = " + BankerSolver.format(report.need()[pid]));
+                logSteps(report.safety());
+
+                available = report.available();
+                allocation = report.allocation();
+                need = report.need();
+                refreshNeedAndAvailable();
+
+                log("\n  [OK] 允许分配！");
+                log("       安全序列：" + joinSequence(report.safety().sequence()));
+                setStatus("分配成功 · " + joinSequence(report.safety().sequence()), ACCENT_GREEN);
+            }
+        }
     }
 
     private void resetState() {
@@ -823,20 +790,20 @@ public class BankerAlgorithm extends JFrame {
             available[j] = resourceTotals[j];
             modelAvailable.setValueAt(available[j], 0, j);
         }
-        log("[RESET] \u72b6\u6001\u5df2\u91cd\u7f6e\u3002");
-        setStatus("\u5df2\u91cd\u7f6e", TEXT_SECONDARY);
+        log("[RESET] 状态已重置。");
+        setStatus("已重置", TEXT_SECONDARY);
     }
 
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
-    //  宸ュ叿鏂规硶
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+    // ════════════════════════════════════════════════════════════════
+    //  工具方法
+    // ════════════════════════════════════════════════════════════════
 
     private void log(String msg) {
         outputArea.append(msg + "\n");
     }
 
     private void error(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "\u9519\u8bef", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, msg, "错误", JOptionPane.ERROR_MESSAGE);
     }
 
     private void setStatus(String text, Color color) {
@@ -844,37 +811,21 @@ public class BankerAlgorithm extends JFrame {
         statusIndicator.setForeground(color);
     }
 
-    private String arrayToString(int[] arr) {
-        StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]);
-            if (i < arr.length - 1) sb.append(", ");
-        }
-        sb.append("]");
-        return sb.toString();
-    }
-
     private String joinSequence(List<Integer> seq) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < seq.size(); i++) {
             sb.append("P").append(seq.get(i));
-            if (i < seq.size() - 1) sb.append(" \u2192 ");
+            if (i < seq.size() - 1) sb.append(" → ");
         }
         return sb.toString();
     }
 
-    private int[][] deepCopy(int[][] src) {
-        int[][] dst = new int[src.length][src[0].length];
-        for (int i = 0; i < src.length; i++) System.arraycopy(src[i], 0, dst[i], 0, src[i].length);
-        return dst;
-    }
-
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
-    //  鍏ュ彛
-    // 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?
+    // ════════════════════════════════════════════════════════════════
+    //  入口
+    // ════════════════════════════════════════════════════════════════
 
     public static void main(String[] args) {
-        // 鍏ㄥ眬鍚敤鏂囨湰鎶楅敮榻?
+        // 全局启用文本抗锯齿
         System.setProperty("awt.useSystemAAFontSettings", "on");
         System.setProperty("swing.aatext", "true");
 
